@@ -13,6 +13,10 @@ app.engine('hbs', handlebars({
   extname: '.hbs'
 }));
 app.set('view engine', 'hbs');
+
+//set Static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // set view
 app.set('views', path.join(__dirname, 'resources/views'));
 
