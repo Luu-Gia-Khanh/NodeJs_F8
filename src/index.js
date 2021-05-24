@@ -2,11 +2,19 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const handlebars = require('express-handlebars');
+const { urlencoded } = require('express');
+const route = require('./routes');
+
 const app = express();
 const port = 3000;
 
+app.use(express.urlencoded({
+  extended:true,
+}));
+app.use(express.json());
+
 // http logger
-app.use(morgan('combined'));
+//app.use(morgan('combined'));
 
 // Template engine
 app.engine('hbs', handlebars({
@@ -20,13 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // set view
 app.set('views', path.join(__dirname, 'resources/views'));
 
-// ROUTE
-app.get('/trang-chu', (req, res) => {
-  res.render('home');
-});
-app.get('/tin-tuc', (req, res) => {
-  res.render('news');
-});
+// Route init
+route(app);
 
 // port
 app.listen(port, () => {
