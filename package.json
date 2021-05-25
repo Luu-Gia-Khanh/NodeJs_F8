@@ -25,7 +25,8 @@
   "homepage": "https://github.com/Luu-Gia-Khanh/NodeJs_F8#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "express-handlebars": "^5.3.2"
+    "express-handlebars": "^5.3.2",
+    "mongoose": "^5.12.11"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

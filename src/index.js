@@ -4,10 +4,15 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const { urlencoded } = require('express');
 const route = require('./routes');
+const db = require('./config/db');
 
-const app = express();
+const app= express();
 const port = 3000;
 
+// Connect DB
+db.connect();
+
+// get Value Method [POST]
 app.use(express.urlencoded({
   extended:true,
 }));
@@ -34,4 +39,4 @@ route(app);
 // port
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
-})
+});
