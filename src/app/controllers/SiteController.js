@@ -1,5 +1,6 @@
 const Course = require("../models/Course");
 const {mutipleMongooseToObject} = require('../../util/mongoose');
+const { query } = require("express");
 class SiteController {
     home(req, res, next) {
         Course.find({})
@@ -14,6 +15,7 @@ class SiteController {
     search(req, res) {
         res.render("news");
     }
+
 }
 
 module.exports = new SiteController();
