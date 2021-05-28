@@ -17,12 +17,36 @@ class CourseController{
         res.render('courses/createCourse');
     }
     processCreateCourse(req, res, next){
-
         const formData = req.body;
         formData.image = 'okok';
         const course = new Course(formData);
         course.save()
             .then(() => res.redirect('/home'))
+            .catch(next);
+    }
+    listCourse(req, res, next){
+        Course.find()
+            .then(course => {
+                res.render('courses/listCourse', {
+                    course: mutipleMongooseToObject(course),
+                });
+            });
+    }
+    update(req, res, next){
+        var id = req.params.id;
+        Course.findOne({ _id: id })
+            .then(course => {
+                res.render('courses/updateCourse',{
+                    course: mongooesToObject(course),
+                });
+            })
+            .catch(next);
+    }
+    processUpdataCourse(req, res, next){
+        Course.updateOne({_id: req.params.id}, req.body)
+            .then(() =>{
+                res.redirect('/course/listCourse');
+            })
             .catch(next);
     }
 }

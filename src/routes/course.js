@@ -3,6 +3,9 @@ const router = express.Router();
 
 const courseController = require('../app/controllers/CourseController');
 
+router.put('/processUpdataCourse/:id', courseController.processUpdataCourse);
+router.get('/update/:id', courseController.update);
+router.get('/listCourse', courseController.listCourse);
 router.post('/processCreateCourse', courseController.processCreateCourse);
 router.get('/create',courseController.createCourse);
 router.get('/:slug', courseController.show);

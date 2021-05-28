@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container row">
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>stt</th>
+                    <th class="col-2">name</th>
+                    <th class="col-3">desc</th>
+                    <th class="col-3">image</th>
+                    <th class="col-2">slug</th>
+                    <th class="col-2">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each course}}
+                <tr>
+                    <td>{{sum @index 1}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.desc}}</td>
+                    <td>
+                        <img src="{{this.image}}" height="100" alt="">
+                    </td>
+                    <td>{{this.slug}}</td>
+                    <td>
+                        <a href="/course/delete/{{this._id}}" class="btn btn-danger" >Xóa</a>
+                        <a href="/course/update/{{this._id}}" class="btn btn-primary">Sửa</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
