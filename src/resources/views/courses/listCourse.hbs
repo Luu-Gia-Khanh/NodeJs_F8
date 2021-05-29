@@ -30,7 +30,7 @@
                     </td>
                     <td>{{this.slug}}</td>
                     <td>
-                        <a href="/course/delete/{{this._id}}" class="btn btn-danger" >Xóa</a>
+                        <a href="" class="btn btn-danger" data-id = "{{this._id}}" data-bs-toggle="modal" data-bs-target="#displayModel" >Xóa</a>
                         <a href="/course/update/{{this._id}}" class="btn btn-primary">Sửa</a>
                     </td>
                 </tr>
@@ -38,5 +38,42 @@
             </tbody>
         </table>
     </div>
+
+    {{!-- Modal delete --}}
+    <div class="modal fade" id="displayModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">THÔNG BÁO</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc muốn xóa nó ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_delete_course" class="btn btn-danger">Xóa</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    {{!-- FORM HIDDEN DELETE --}}
+    <form id="form_delete" action="" method="post"></form>
+    <script>
+        
+        var displayModel = document.getElementById('displayModel');
+        var btn_delete_course = document.getElementById('btn_delete_course');
+        var form_delete = document.forms['form_delete'];
+        var id;
+        displayModel.addEventListener('show.bs.modal', function(){
+            var button = event.relatedTarget;
+            id = button.getAttribute('data-id');
+        });
+        btn_delete_course.onclick = function(){
+            form_delete.action = '/course/delete/'+id+'?_method=DELETE';
+            form_delete.submit();
+        }
+
+    </script>
 </body>
 </html>
