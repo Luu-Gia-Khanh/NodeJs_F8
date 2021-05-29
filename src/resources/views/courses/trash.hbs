@@ -7,9 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="trash">
-        <a href="/course/trash">TRASH</a>
-    </div>
+    <h2>Trash</h2>
     <div class="container row">
         <table class="table table-bordered mt-4">
             <thead>
@@ -34,7 +32,7 @@
                     <td>{{this.slug}}</td>
                     <td>
                         <a href="" class="btn btn-danger" data-id = "{{this._id}}" data-bs-toggle="modal" data-bs-target="#displayModel" >Xóa</a>
-                        <a href="/course/update/{{this._id}}" class="btn btn-primary">Sửa</a>
+                        <a href="" class="btn btn-primary btn-restore" data-id="{{this._id}}">Khôi phục</a>
                     </td>
                 </tr>
                 {{ else }}
@@ -64,23 +62,34 @@
             </div>
         </div>
     </div>
-    {{!-- FORM HIDDEN DELETE --}}
+    {{!-- FORM HIDDEN --}}
     <form id="form_delete" action="" method="post"></form>
+    <form id="form_restore" action="" method="post"></form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script>
-        
-        var displayModel = document.getElementById('displayModel');
-        var btn_delete_course = document.getElementById('btn_delete_course');
-        var form_delete = document.forms['form_delete'];
-        var id;
-        displayModel.addEventListener('show.bs.modal', function(){
-            var button = event.relatedTarget;
-            id = button.getAttribute('data-id');
-        });
-        btn_delete_course.onclick = function(){
-            form_delete.action = '/course/delete/'+id+'?_method=DELETE';
-            form_delete.submit();
-        }
 
+            var displayModel = document.getElementById('displayModel');
+            var btn_delete_course = document.getElementById('btn_delete_course');
+            var form_delete = document.forms['form_delete'];
+            var id;
+            var btnRestore = $('.btn-restore');
+
+            displayModel.addEventListener('show.bs.modal', function(){
+                var button = event.relatedTarget;
+                id = button.getAttribute('data-id');
+            });
+            btn_delete_course.onclick = function(){
+                form_delete.action = '/course/deleteforce/'+id+'?_method=DELETE';
+                form_delete.submit();
+            }
+            btnRestore.click(function(e){
+                e.preventDefault();
+                var id = $(this).data('id');
+                var form_restore = document.forms['form_restore'];
+                form_delete.action = '/course/restore/'+id+'?_method=PATCH';
+                form_delete.submit();
+            });
+        
     </script>
 </body>
 </html>

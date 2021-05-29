@@ -19,6 +19,7 @@ class CourseController{
     processCreateCourse(req, res, next){
         const formData = req.body;
         formData.image = 'okok';
+        formData.deletedAt = null;
         const course = new Course(formData);
         course.save()
             .then(() => res.redirect('/home'))
@@ -50,10 +51,31 @@ class CourseController{
             .catch(next);
     }
     deleteCourse(req, res, next){
+        Course.delete({_id:req.params.id})
+            .then(() => res.redirect('back'))
+            .catch(next);
+        
+    }
+    trash(req, res, next){
+        Course.findDeleted({})
+            .then((course) => {res.render('courses/trash', {
+                course: mutipleMongooseToObject(course),
+            })})
+            .catch(next);
+    }
+
+    restore(req, res, next){
+        Course.restore({_id:req.params.id})
+            .then(() => res.redirect('/course/listCourse'))
+            .catch(next);
+    }
+    deleteforce(req, res, next){
         Course.deleteOne({_id:req.params.id})
             .then(() => res.redirect('back'))
             .catch(next);
     }
+
+
 }
 
 module.exports = new CourseController();
