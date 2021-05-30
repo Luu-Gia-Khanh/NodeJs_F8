@@ -26,7 +26,7 @@ class CourseController{
             .catch(next);
     }
     listCourse(req, res, next){
-        Course.find()
+        Course.find({})
             .then(course => {
                 res.render('courses/listCourse', {
                     course: mutipleMongooseToObject(course),
@@ -57,11 +57,16 @@ class CourseController{
         
     }
     trash(req, res, next){
-        Course.findDeleted({})
-            .then((course) => {res.render('courses/trash', {
+
+        Promise.all([
+            Course.countDocumentsDeleted(),
+            Course.findDeleted({}),
+        ]).then(([countDelete,course]) => {
+            res.render('courses/trash', {
+                countDelete: countDelete,
                 course: mutipleMongooseToObject(course),
-            })})
-            .catch(next);
+            });
+        }). catch(next);
     }
 
     restore(req, res, next){
