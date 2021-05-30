@@ -10,42 +10,58 @@
     <div class="trash">
         <a href="/course/trash">TRASH</a>
     </div>
-    <div class="container row">
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>stt</th>
-                    <th class="col-2">name</th>
-                    <th class="col-3">desc</th>
-                    <th class="col-3">image</th>
-                    <th class="col-2">slug</th>
-                    <th class="col-2">Thao Tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each course}}
-                <tr>
-                    <td>{{sum @index 1}}</td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.desc}}</td>
-                    <td>
-                        <img src="{{this.image}}" height="100" alt="">
-                    </td>
-                    <td>{{this.slug}}</td>
-                    <td>
-                        <a href="" class="btn btn-danger" data-id = "{{this._id}}" data-bs-toggle="modal" data-bs-target="#displayModel" >Xóa</a>
-                        <a href="/course/update/{{this._id}}" class="btn btn-primary">Sửa</a>
-                    </td>
-                </tr>
-                {{ else }}
+    <form action="/course/handle-form-action" method="post" name="container-form">
+        <div class="mt-4">
+            <div class="checkbox">
+                <label><input type="checkbox" value="" id="checkAll"> Chọn tất cả</label>
+            </div>
+            <select name="action" id="" class="col-3 form-control">
+                <option value="delete">Xóa</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-small mt-4 disabled btnSubmit">Áp dụng</button>
+        </div>
+        <div class="container row">
+            <table class="table table-bordered mt-4">
+                <thead>
                     <tr>
-                        <td colspan="6" align="center">No Data</td>
+                        <th>#</th>
+                        <th>stt</th>
+                        <th class="col-2">name</th>
+                        <th class="col-3">desc</th>
+                        <th class="col-3">image</th>
+                        <th class="col-2">slug</th>
+                        <th class="col-2">Thao Tác</th>
                     </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-
+                </thead>
+                <tbody>
+                    {{#each course}}
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox"  value="{{this._id}}" name="CourseIds[]"></label>
+                            </div>
+                        </td>
+                        <td>{{sum @index 1}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.desc}}</td>
+                        <td>
+                            <img src="{{this.image}}" height="100" alt="">
+                        </td>
+                        <td>{{this.slug}}</td>
+                        <td>
+                            <a href="" class="btn btn-danger" data-id = "{{this._id}}" data-bs-toggle="modal" data-bs-target="#displayModel" >Xóa</a>
+                            <a href="/course/update/{{this._id}}" class="btn btn-primary">Sửa</a>
+                        </td>
+                    </tr>
+                    {{ else }}
+                        <tr>
+                            <td colspan="6" align="center">No Data</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </form>
     {{!-- Modal delete --}}
     <div class="modal fade" id="displayModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -66,12 +82,18 @@
     </div>
     {{!-- FORM HIDDEN DELETE --}}
     <form id="form_delete" action="" method="post"></form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script>
         
         var displayModel = document.getElementById('displayModel');
         var btn_delete_course = document.getElementById('btn_delete_course');
         var form_delete = document.forms['form_delete'];
         var id;
+        var checkAll = $('#checkAll');
+        var itemCheck = $('input[name="CourseIds[]"]');
+        var btnSubmit = $('.btnSubmit');
+        var containerForm = document.forms['container-form'];
+
         displayModel.addEventListener('show.bs.modal', function(){
             var button = event.relatedTarget;
             id = button.getAttribute('data-id');
@@ -81,6 +103,48 @@
             form_delete.submit();
         }
 
+        checkAll.change(function(){
+            var isCheckAll = $(this).prop('checked');
+            if(isCheckAll){
+                itemCheck.prop('checked', true);
+            }
+            else{
+                itemCheck.prop('checked', false);
+            }
+            renderCheckAllSubmitBtn();
+        });
+
+        itemCheck.change(function(){
+            var countCheck = itemCheck.length === $('input[name="CourseIds[]"]:checked').length;
+            if(!countCheck){
+                checkAll.prop('checked', false);
+            }
+            else{
+                checkAll.prop('checked', true);
+            }
+            renderCheckAllSubmitBtn();
+        });
+
+        btnSubmit.click(function(e){
+            e.preventDefault();
+            var isSubmitable = !$(this).hasClass('disabled');
+            if(isSubmitable){
+                containerForm.submit();
+            }
+        });
+        
+        
+        
+        function renderCheckAllSubmitBtn(){
+            var countCheckItem = $('input[name="CourseIds[]"]:checked').length;
+            if(countCheckItem > 0){
+                btnSubmit.removeClass('disabled');
+            }
+            else{
+                btnSubmit.addClass('disabled');
+            }
+        }
+    
     </script>
 </body>
 </html>

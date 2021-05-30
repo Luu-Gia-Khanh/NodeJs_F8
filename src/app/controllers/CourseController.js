@@ -79,7 +79,18 @@ class CourseController{
             .then(() => res.redirect('back'))
             .catch(next);
     }
-
+    handleFormAction(req, res, next){
+        switch (req.body.action) {
+            case 'delete':
+                Course.delete({_id: {$in: req.body.CourseIds}})
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+        
+            default:
+                res.send('error');
+        }
+    }
 
 }
 
